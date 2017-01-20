@@ -1,25 +1,31 @@
 package udacity.nanodegree.popularmovies;
 
+import android.app.Activity;
 import android.app.Application;
+import android.app.Service;
 
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.squareup.leakcanary.LeakCanary;
 
-import java.util.List;
+import javax.inject.Inject;
 
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
+import dagger.android.HasServiceInjector;
 import timber.log.Timber;
-import udacity.nanodegree.popularmovies.api.models.ConfigurationResponse;
-import udacity.nanodegree.popularmovies.api.models.GenresResponse;
-import udacity.nanodegree.popularmovies.di.MainComponent;
-import udacity.nanodegree.popularmovies.di.MainModule;
+import udacity.nanodegree.popularmovies.di.AppComponent;
 import udacity.nanodegree.popularmovies.utils.DebugTree;
 
+import static udacity.nanodegree.popularmovies.utils.DeveloperHelper.enableStetho;
 
-public class MovieApp extends Application {
 
-    private static MainComponent                            graph;
-    public         ConfigurationResponse.ImageConfiguration imageConfiguration;
-    public         List<GenresResponse.Genre>               genres;
+public class MovieApp extends Application implements HasActivityInjector, HasServiceInjector {
+
+    @Inject DispatchingAndroidInjector<Activity> dispatchingActivityInjector;
+    @Inject DispatchingAndroidInjector<Service>  dispatchingServiceInjector;
+
+    private static AppComponent               graph;
 
     @Override
     public void onCreate() {
@@ -32,15 +38,26 @@ public class MovieApp extends Application {
         }
         LeakCanary.install(this);
 
-        graph = MainComponent.Initializer.init(new MainModule(this));
+        graph = AppComponent.Initializer.init(this);
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new DebugTree("movies"));
+            enableStetho(this);
         }
         AndroidThreeTen.init(this);
     }
 
-    public static MainComponent graph() {
+    @Override
+    public AndroidInjector<Activity> activityInjector() {
+        return dispatchingActivityInjector;
+    }
+
+    @Override
+    public AndroidInjector<Service> serviceInjector() {
+        return dispatchingServiceInjector;
+    }
+
+    public static AppComponent graph() {
         return graph;
     }
 }

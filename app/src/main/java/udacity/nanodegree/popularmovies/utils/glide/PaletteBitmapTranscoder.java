@@ -13,12 +13,12 @@ import com.bumptech.glide.load.resource.transcode.ResourceTranscoder;
 
 public class PaletteBitmapTranscoder implements ResourceTranscoder<Bitmap, PaletteBitmap> {
 
-    @NonNull private final Context    ctx;
     @NonNull private final BitmapPool bitmapPool;
+    private final          int        twelveDip;
 
     public PaletteBitmapTranscoder(@NonNull final Context context) {
-        this.ctx = context;
-        this.bitmapPool = Glide.get(context).getBitmapPool();
+        bitmapPool = Glide.get(context).getBitmapPool();
+        twelveDip = twelveDip(context);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class PaletteBitmapTranscoder implements ResourceTranscoder<Bitmap, Palet
                    .maximumColorCount(6)
                    .clearFilters()
                    .setRegion(0,
-                              bitmap.getHeight() - twelveDip(ctx),
+                              bitmap.getHeight() - twelveDip,
                               bitmap.getWidth(),
                               bitmap.getHeight())
                    .generate();

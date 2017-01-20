@@ -3,8 +3,6 @@ package udacity.nanodegree.popularmovies.api.models;
 import android.content.Context;
 import android.databinding.Observable;
 import android.databinding.ObservableInt;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
@@ -12,7 +10,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
 
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 import org.threeten.bp.LocalDate;
 
@@ -20,10 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import paperparcel.PaperParcel;
-import udacity.nanodegree.popularmovies.MovieApp;
 import udacity.nanodegree.popularmovies.R;
-import udacity.nanodegree.popularmovies.api.models.GenresResponse.Genre;
 
 import static udacity.nanodegree.popularmovies.utils.Utils.colorWithAlpha;
 import static udacity.nanodegree.popularmovies.utils.Utils.tintColor;
@@ -59,36 +54,33 @@ import static udacity.nanodegree.popularmovies.utils.Utils.tintColor;
  */
 public class MoviesResponse {
 
-    @SerializedName("page") public          int         page;
-    @SerializedName("total_results") public int         totalResults;
-    @SerializedName("total_pages") public   int         totalPages;
-    @SerializedName("results") public       List<Movie> results;
+    @Json(name = "page") public          int         page;
+    @Json(name = "total_results") public int         totalResults;
+    @Json(name = "total_pages") public   int         totalPages;
+    @Json(name = "results") public       List<Movie> results;
 
 
-    @PaperParcel
-    public static class Movie implements Parcelable {
+    public static class Movie {
 
-        @SerializedName("poster_path") public       String        posterPath;
-        @SerializedName("adult") public             boolean       adult;
-        @SerializedName("overview") public          String        overview;
-        @SerializedName("release_date") public      LocalDate     releaseDate;
-        @SerializedName("id") public                int           id;
-        @SerializedName("original_title") public    String        originalTitle;
-        @SerializedName("original_language") public String        originalLanguage;
-        @SerializedName("title") public             String        title;
-        @SerializedName("backdrop_path") public     String        backdropPath;
-        @SerializedName("popularity") public        double        popularity;
-        @SerializedName("vote_count") public        int           voteCount;
-        @SerializedName("video") public             boolean       video;
-        @SerializedName("vote_average") public      float         voteAverage;
-        @SerializedName("genre_ids") public         List<Integer> genreIds;
+        @Json(name = "poster_path") public       String        posterPath;
+        @Json(name = "adult") public             boolean       adult;
+        @Json(name = "overview") public          String        overview;
+        @Json(name = "release_date") public      LocalDate     releaseDate;
+        @Json(name = "id") public                int           id;
+        @Json(name = "original_title") public    String        originalTitle;
+        @Json(name = "original_language") public String        originalLanguage;
+        @Json(name = "title") public             String        title;
+        @Json(name = "backdrop_path") public     String        backdropPath;
+        @Json(name = "popularity") public        double        popularity;
+        @Json(name = "vote_count") public        int           voteCount;
+        @Json(name = "video") public             boolean       video;
+        @Json(name = "vote_average") public      float         voteAverage;
+        @Json(name = "genre_ids") public         List<Integer> genreIds;
 
-        public ObservableInt colorTitle;
-        public ObservableInt colorBackground;
-        public ObservableInt colorTint;
-        public ObservableInt colorTransparentBackground;
-
-        public static final Creator<Movie> CREATOR = PaperParcelMoviesResponse_Movie.CREATOR;
+        public transient ObservableInt colorTitle;
+        public transient ObservableInt colorBackground;
+        public transient ObservableInt colorTint;
+        public transient ObservableInt colorTransparentBackground;
 
         public Movie() {
 
@@ -148,31 +140,21 @@ public class MoviesResponse {
 
         @Nullable
         public String genres(@NonNull final Context ctx) {
-            final List<Genre> genres = ((MovieApp) ctx.getApplicationContext()).genres;
-            if (genres == null || genres.isEmpty()) {
-                return null;
-            }
+//            final List<Genre> genres = ((MovieApp) ctx.getApplicationContext()).genres;
+//            if (genres == null || genres.isEmpty()) {
+//                return null;
+//            }
             final List<String> genreNames = new ArrayList<>();
-            for (Genre g : genres) {
-                if (genreIds.contains(g.id)) {
-                    genreNames.add(g.name);
-                }
-            }
+//            for (Genre g : genres) {
+//                if (genreIds.contains(g.id)) {
+//                    genreNames.add(g.name);
+//                }
+//            }
             return TextUtils.join(", ", genreNames);
         }
 
         public float rating() {
             return voteAverage;
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(final Parcel dest, final int flags) {
-            PaperParcelMoviesResponse_Movie.writeToParcel(this, dest, flags);
         }
     }
 }

@@ -12,8 +12,8 @@ import android.support.v7.graphics.Palette;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import udacity.nanodegree.popularmovies.api.models.ConfigurationResponse;
 import udacity.nanodegree.popularmovies.api.models.MoviesResponse;
+import udacity.nanodegree.popularmovies.model.ImageConfig;
 import udacity.nanodegree.popularmovies.utils.glide.BackdropImage;
 
 public class Utils {
@@ -92,10 +92,10 @@ public class Utils {
 
     public static String urlFor(@NonNull final MoviesResponse.Movie movie,
                                 final int width,
-                                @NonNull final ConfigurationResponse.ImageConfiguration imageConfiguration) {
+                                @NonNull final ImageConfig imageConfig) {
 
-        return Uri.parse(imageConfiguration.secureBaseUrl).buildUpon()
-                  .appendPath(fileSize(width, imageConfiguration.posterSizes))
+        return Uri.parse(imageConfig.secureBaseUrl).buildUpon()
+                  .appendPath(fileSize(width, imageConfig.posterSizes))
                   .appendPath(movie.posterPath.substring(1)) // remove leading /
                   .build()
                   .toString();
@@ -103,10 +103,10 @@ public class Utils {
 
     public static String urlFor(@NonNull final BackdropImage image,
                                 final int width,
-                                @NonNull final ConfigurationResponse.ImageConfiguration imageConfiguration) {
+                                @NonNull final ImageConfig imageConfig) {
 
-        return Uri.parse(imageConfiguration.secureBaseUrl).buildUpon()
-                  .appendPath(fileSize(width, imageConfiguration.posterSizes))
+        return Uri.parse(imageConfig.secureBaseUrl).buildUpon()
+                  .appendPath(fileSize(width, imageConfig.posterSizes))
                   .appendPath(image.path.substring(1)) // remove leading /
                   .build()
                   .toString();

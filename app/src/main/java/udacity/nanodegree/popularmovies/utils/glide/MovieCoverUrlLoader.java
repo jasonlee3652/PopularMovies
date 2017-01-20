@@ -13,18 +13,15 @@ import com.bumptech.glide.load.model.stream.BaseGlideUrlLoader;
 
 import java.io.InputStream;
 
-import udacity.nanodegree.popularmovies.MovieApp;
-import udacity.nanodegree.popularmovies.api.models.ConfigurationResponse;
 import udacity.nanodegree.popularmovies.api.models.MoviesResponse;
-import udacity.nanodegree.popularmovies.utils.Utils;
 
 public class MovieCoverUrlLoader extends BaseGlideUrlLoader<MoviesResponse.Movie> {
 
     @NonNull private final Context ctx;
 
-    protected MovieCoverUrlLoader(@NonNull final ModelLoader<GlideUrl, InputStream> concreteLoader,
-                                  @NonNull final ModelCache<MoviesResponse.Movie, GlideUrl> modelCache,
-                                  @NonNull final Context context) {
+    MovieCoverUrlLoader(@NonNull final ModelLoader<GlideUrl, InputStream> concreteLoader,
+                        @NonNull final ModelCache<MoviesResponse.Movie, GlideUrl> modelCache,
+                        @NonNull final Context context) {
         super(concreteLoader, modelCache);
         this.ctx = context;
     }
@@ -35,9 +32,8 @@ public class MovieCoverUrlLoader extends BaseGlideUrlLoader<MoviesResponse.Movie
                             final int height,
                             final Options options) {
 
-        final ConfigurationResponse.ImageConfiguration imageConfiguration =
-            ((MovieApp) ctx.getApplicationContext()).imageConfiguration;
-        return Utils.urlFor(movie, width, imageConfiguration);
+//        final ConfigResponse.ImageConfig imageConfig = ((MovieApp) ctx.getApplicationContext()).imageConfig;
+        return ""; //Utils.urlFor(movie, width, imageConfig);
     }
 
     @Override
